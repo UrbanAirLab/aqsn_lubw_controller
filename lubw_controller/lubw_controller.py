@@ -30,8 +30,16 @@ class LUBW_controller:
         self.password = lubw_password
         self.base_url = lubw_base_url
 
+
+
     # Function to fetch data for a station and time range
-    def fetch_station_data(station, start_time, end_time) -> pd.DataFrame:
+    def fetch_station_data(station, start_time, end_time):
+
+        def rename_columns(df, column_mapping):
+            existing_columns = {old: new for old, new in column_mapping.items() if old in df.columns}
+            df.rename(columns=existing_columns, inplace=True)
+            return df
+
         # Get the components for the specified station
         components = station_components.get(station)
 
@@ -104,6 +112,9 @@ class LUBW_controller:
         # Sort by datetime if needed
         df['datetime'] = pd.to_datetime(df['datetime'])
         df = df.sort_values(by='datetime').reset_index(drop=True)
+        column_mapping = {"PM10": "pm10", "PM2.5": "pm25", "TEMP": "sht_temp", "RLF": "sht_humid",
+                          "NSCH": "sht_nsch", "STRG": "sht_strg", "WIV": "sht_wiv", "WIR":"sht_wir"}
+        df = rename_columns(df, column_mapping)
 
         return df
 
