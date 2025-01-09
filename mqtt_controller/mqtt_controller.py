@@ -54,9 +54,9 @@ class MQTTController:
             print(f"data published to {mqtt_topic}/{self.station}: \n")
             print(json_data)
         finally:
-            self.client.loop_stop()
-            self.client.disconnect()
-
+            # self.client.loop_stop()
+            # self.client.disconnect()
+            pass
 
     def stop(self) -> None:
         self.client.loop_stop()
